@@ -52,6 +52,9 @@ dependencies {
     
     // Fragment support
     implementation "androidx.fragment:fragment-ktx:1.6.1"
+
+    // MQTT client
+    implementation "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
     
     // Testing
     testImplementation "junit:junit:4.13.2"

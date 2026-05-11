@@ -47,6 +47,25 @@
     <!-- General -->
     <string name="no_data">-- No Data --</string>
 
+    <!-- MQTT Devices -->
+    <string name="mqtt_title">MQTT GPS Publisher</string>
+    <string name="mqtt_broker_hint">Broker IP or link</string>
+    <string name="mqtt_port_hint">Port</string>
+    <string name="mqtt_device_name_hint">Device name</string>
+    <string name="mqtt_connect">Connect</string>
+    <string name="mqtt_disconnect">Disconnect</string>
+    <string name="mqtt_start_publish">Start Publish GPS</string>
+    <string name="mqtt_stop_publish">Stop Publish</string>
+    <string name="mqtt_topic_label">Topic:</string>
+    <string name="mqtt_status_label">Status:</string>
+    <string name="mqtt_payload_label">Payload:</string>
+    <string name="mqtt_location_label">Latest GPS:</string>
+    <string name="mqtt_not_connected">Not connected</string>
+    <string name="mqtt_waiting_location">Waiting for GPS data...</string>
+
+    <!-- Settings WebView -->
+    <string name="settings_site_url">http://10.3.3.31:5000</string>
+
     <!-- Navigation -->
     <string name="nav_dashboard">Dashboard</string>
     <string name="nav_devices">Devices</string>

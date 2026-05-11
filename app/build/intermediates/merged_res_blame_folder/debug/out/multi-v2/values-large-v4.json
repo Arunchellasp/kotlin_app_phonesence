@@ -1,8 +1,27 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.simplebuttonapp-mergeDebugResources-20:/values-large-v4/values-large-v4.xml",
+            "outputFile": "com.example.simplebuttonapp-mergeDebugResources-37:/values-large-v4/values-large-v4.xml",
             "map": [
+                {
+                    "source": "C:\\Users\\arunp\\.gradle\\caches\\transforms-3\\620ed55ad84f733793bedcdcb1ed882c\\transformed\\material-1.9.0\\res\\values-large-v4\\values-large-v4.xml",
+                    "from": {
+                        "startLines": "2,3,4,10",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,177,311,752",
+                        "endLines": "2,3,9,15",
+                        "endColumns": "121,133,10,10",
+                        "endOffsets": "172,306,747,1190"
+                    },
+                    "to": {
+                        "startLines": "11,12,13,19",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "752,874,1008,1449",
+                        "endLines": "11,12,18,24",
+                        "endColumns": "121,133,10,10",
+                        "endOffsets": "869,1003,1444,1887"
+                    }
+                },
                 {
                     "source": "C:\\Users\\arunp\\.gradle\\caches\\transforms-3\\1e2e6004c2e64c83abab7733f4ba23f5\\transformed\\appcompat-1.6.0\\res\\values-large-v4\\values-large-v4.xml",
                     "from": {

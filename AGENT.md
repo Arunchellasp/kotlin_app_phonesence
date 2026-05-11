@@ -1,9 +1,10 @@
 ---
-name: Android Kotlin Developer Agent
+name: SimpleButtonApp Android Agent
 description: >
-  Expert agent for Android development with Kotlin, Gradle, and AndroidX libraries.
-  Handles project setup, dependency management, build configuration, testing, and deployment.
-  Specializes in debugging build issues, version compatibility, and best practices.
+  Specialized agent for SimpleButtonApp - a multi-fragment Android application with bottom navigation,
+  real-time sensor data collection (accelerometer, gyroscope, magnetometer), and GPS tracking.
+  Manages fragment-based navigation, sensor lifecycle, location permissions, and Material Design components.
+  Expert in Kotlin, AndroidX, Fragment lifecycle, SensorEventListener, LocationCallback, and BottomNavigationView.
 applyTo:
   - "**/*.gradle"
   - "**/AndroidManifest.xml"
@@ -12,92 +13,357 @@ applyTo:
   - "**/proguard-rules.pro"
   - "gradle.properties"
   - "settings.gradle"
+  - "SKILL.md"
+  - "CONFIGURATION.md"
 capabilities:
-  - Build configuration and optimization
-  - Kotlin Android development
+  - Fragment-based navigation with BottomNavigationView
+  - Sensor integration (accelerometer, gyroscope, magnetometer)
+  - GPS location tracking with continuous updates
+  - Runtime permission handling for location access
+  - Fragment lifecycle management (onResume/onPause)
+  - Sensor listener lifecycle management
+  - Material Design components (BottomNavigationView, Material menu items)
+  - Real-time data display and formatting
+  - Build configuration and APK deployment
+  - Device integration and testing
+  - Kotlin Android development best practices
   - AndroidX library management
-  - Version compatibility resolution
-  - ProGuard and obfuscation
-  - Resource management
-  - Testing setup and execution
-  - APK generation and deployment
-  - Gradle troubleshooting
+  - ProGuard obfuscation rules
 mode: autonomous
 ---
 
-# Android Kotlin Development Agent
+# SimpleButtonApp Android Development Agent
 
-## Purpose
+## Project Overview
 
-This agent automates Android application development workflows, from project initialization to production deployment. It specializes in:
+**SimpleButtonApp** is a multi-tab Android application demonstrating modern architecture patterns:
+- **Fragment-Based Navigation**: 4 tabs (Dashboard, Devices, Settings, About) via BottomNavigationView
+- **Real-Time Sensor Data**: Accelerometer, Gyroscope, Magnetometer display
+- **GPS Tracking**: Continuous location updates with accuracy and altitude
+- **Modern Architecture**: Fragment lifecycle, LocationCallback, SensorEventListener
+- **Material Design**: Professional UI with color-coded sensor sections
 
-- **Build Management**: Gradle configuration, plugin versions, compilation settings
-- **Kotlin Development**: Modern Kotlin practices, coroutines, lifecycle management
-- **Dependency Resolution**: AndroidX, third-party libraries, version conflicts
-- **Configuration Issues**: SDK compatibility, Java version matching, JVM settings
-- **Testing & Validation**: Unit tests, instrumented tests, lint checks
-- **Deployment**: APK generation, signing, installation on devices
+## Project Structure
+
+```
+app/src/main/
+├── kotlin/com/example/simplebuttonapp/
+│   ├── MainActivity.kt              (Navigation orchestrator)
+│   ├── DashboardFragment.kt         (Sensor & GPS display)
+│   ├── DevicesFragment.kt           (Placeholder)
+│   ├── SettingsFragment.kt          (Placeholder)
+│   └── AboutFragment.kt             (Placeholder)
+└── res/
+    ├── layout/
+    │   ├── activity_main.xml        (FrameLayout + BottomNav)
+    │   ├── fragment_dashboard.xml   (Sensor/GPS display)
+    │   ├── fragment_devices.xml
+    │   ├── fragment_settings.xml
+    │   └── fragment_about.xml
+    ├── menu/
+    │   └── bottom_menu.xml          (Navigation items)
+    └── values/
+        ├── colors.xml              (Status colors)
+        └── strings.xml             (Localization strings)
+```
+
+## Core Components
+
+### 1. **MainActivity.kt** - Navigation Controller
+**Role**: Orchestrates fragment transactions for bottom navigation
+
+**Key Methods**:
+- `onCreate()` - Initialize BottomNavigationView, load DashboardFragment
+- `setOnItemSelectedListener()` - Handle tab switches, perform fragment transactions
+- Fragment transaction pattern: `replace(container_id, new_fragment).addToBackStack()`
+
+**Lifecycle**: Activity-level, persists across fragment changes
+
+### 2. **DashboardFragment.kt** - Sensor & GPS Hub
+**Role**: Display real-time sensor data and GPS location
+
+**Implements**: `Fragment`, `SensorEventListener`
+
+**Key Methods**:
+- `onViewCreated()` - Initialize sensor manager, GPS callback, request permissions
+- `onResume()` - Register sensors, start GPS updates
+- `onPause()` - Unregister sensors, stop GPS updates
+- `onSensorChanged()` - Handle accelerometer, gyroscope, magnetometer updates
+- `onRequestPermissionsResult()` - Handle location permission response
+
+**Sensor Handling**:
+```kotlin
+when (event.sensor.type) {
+    TYPE_ACCELEROMETER -> updateAccelDisplay()
+    TYPE_GYROSCOPE -> updateGyroDisplay()
+    TYPE_MAGNETIC_FIELD -> updateMagDisplay()
+}
+```
+
+**GPS Handling**:
+```kotlin
+locationCallback = object : LocationCallback() {
+    override fun onLocationResult(locationResult: LocationResult) {
+        updateGPSDisplay()
+    }
+}
+```
+
+### 3. **Placeholder Fragments**
+**DevicesFragment**, **SettingsFragment**, **AboutFragment**
+- Simple placeholder implementations
+- Future enhancement candidates
+- Proper fragment lifecycle with onCreateView()
 
 ## When to Use This Agent
 
-### ✅ **Use This Agent For:**
+### ✅ **USE FOR:**
 
-1. **Build Configuration Issues**
-   - Gradle plugin version mismatches
-   - SDK compatibility problems
-   - JVM memory and version settings
-   - Dependency version conflicts
+1. **Navigation Issues**
+   - Adding new fragments/tabs
+   - Fixing fragment transaction problems
+   - BottomNavigationView configuration
+   - Back stack management
 
-2. **Android Development Tasks**
-   - Creating new Android projects
-   - Adding features to existing apps
-   - Implementing Activities, Fragments, Services
-   - Managing lifecycle and state
+2. **Sensor Development**
+   - Adding new sensor types
+   - Sensor listener lifecycle issues
+   - Sensor data formatting
+   - Filtering/averaging sensor values
 
-3. **Build Failures**
-   - Compilation errors
-   - ProGuard issues
-   - Missing dependencies
-   - Resource conflicts
+3. **GPS/Location Features**
+   - Location accuracy issues
+   - Update interval configuration
+   - Permission handling problems
+   - Altitude/accuracy calculations
 
-4. **Optimization**
-   - Reducing APK size
-   - Improving build speed
-   - Code obfuscation
-   - Resource optimization
+4. **Fragment Lifecycle**
+   - Sensor cleanup when fragment paused
+   - Memory leak prevention
+   - State restoration after rotation
+   - Fragment replacement logic
 
-5. **Testing & Quality**
-   - Unit test setup
-   - Instrumented test configuration
-   - Lint rule configuration
-   - Code quality enforcement
+5. **UI/Layout Issues**
+   - Sensor data display formatting
+   - BottomNavigationView styling
+   - Color-coded section headers
+   - Responsive layouts
 
-6. **Deployment**
-   - Building release APK
-   - Code signing
-   - Installation on devices/emulators
-   - Manifest configuration
+6. **Build & Deployment**
+   - APK compilation
+   - Device installation
+   - ProGuard rules for Google Play Services
+   - Gradle dependency management
 
-### ❌ **DO NOT Use This Agent For:**
-- General non-Android development
-- iOS or cross-platform development (use specialized agents)
-- Unrelated system administration
-- Non-build-related documentation
+7. **Testing & Validation**
+   - GPS mock location setup
+   - Sensor emulator configuration
+   - Runtime permission testing
+   - Fragment navigation testing
+
+### ❌ **DO NOT USE FOR:**
+- Non-Android development
+- Unrelated projects (not SimpleButtonApp)
+- System administration tasks
+- Non-sensor/GPS features (unless essential)
 
 ---
 
 ## Agent Operating Principles
 
-### 1. **Diagnosis First**
-When encountering build issues, systematically diagnose:
-- Check Gradle plugin version against Android SDK version
-- Verify Java/Kotlin version compatibility
-- Validate Android API level requirements
-- Inspect dependency versions and conflicts
-- Review JVM arguments and memory settings
+### 1. **Fragment Lifecycle Awareness**
+Always consider:
+- Sensors MUST be registered in `onResume()`, unregistered in `onPause()`
+- GPS listener MUST be started in `onResume()`, stopped in `onPause()`
+- Never register sensors in `onViewCreated()` - fragment might be hidden
+- Always cleanup resources to prevent battery drain
 
-### 2. **Version Alignment**
-Always ensure these are compatible:
+### 2. **Navigation Pattern**
+Standard fragment transaction:
+```kotlin
+supportFragmentManager.beginTransaction()
+    .replace(R.id.fragment_container, newFragment)
+    .addToBackStack(null)
+    .commit()
+```
+
+### 3. **Permission Handling**
+For GPS access:
+```kotlin
+if (checkSelfPermission(ACCESS_FINE_LOCATION) != GRANTED) {
+    requestPermissions(arrayOf(ACCESS_FINE_LOCATION), CODE)
+} else {
+    startLocationUpdates()
+}
+```
+
+### 4. **Sensor Update Rate**
+Use `SENSOR_DELAY_UI` for display purposes:
+- Provides ~16ms updates (suitable for display refresh)
+- Balances responsiveness with battery life
+- Alternative: `SENSOR_DELAY_NORMAL` (~200ms), `SENSOR_DELAY_FASTEST` (~0ms)
+
+### 5. **GPS Update Configuration**
+Standard 1-second interval:
+```kotlin
+LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000)
+```
+
+---
+
+## Common Tasks
+
+### Task: Add a New Sensor
+1. Update `DashboardFragment.onSensorChanged()`
+2. Add sensor type case in when statement
+3. Create TextView in `fragment_dashboard.xml`
+4. Update `strings.xml` with labels
+5. Register sensor in `onResume()`
+
+### Task: Change GPS Update Interval
+Edit in `DashboardFragment`:
+```kotlin
+val locationRequest = LocationRequest.Builder(
+    Priority.PRIORITY_HIGH_ACCURACY, 
+    2000  // Change from 1000 to 2000 milliseconds
+).build()
+```
+
+### Task: Add New Navigation Tab
+1. Create new Fragment class (e.g., `NewTabFragment.kt`)
+2. Add menu item to `bottom_menu.xml` with unique id
+3. Add fragment layout file
+4. Update `MainActivity.setOnItemSelectedListener()`
+5. Add string resource for tab title
+
+### Task: Fix Permission Issues
+In `DashboardFragment`:
+1. Check permission in `onResume()`
+2. Request if needed in `requestLocationPermissions()`
+3. Handle result in `onRequestPermissionsResult()`
+4. Start GPS only after permission granted
+
+---
+
+## Build & Deployment
+
+### Build Command
+```bash
+cd d:\code\andriod_tool\SimpleButtonApp
+gradle assembleDebug
+```
+
+### Install Command
+```bash
+adb install -r app\build\outputs\apk\debug\app-debug.apk
+```
+
+### Launch Command
+```bash
+adb shell am start -n com.example.simplebuttonapp/.MainActivity
+```
+
+### Screenshot
+```bash
+adb shell screencap -p /sdcard/screenshot.png
+adb pull /sdcard/screenshot.png
+```
+
+---
+
+## Dependencies
+
+| Dependency | Version | Purpose |
+|-----------|---------|---------|
+| androidx.appcompat:appcompat | 1.6.0 | Backward compatibility |
+| androidx.core:core-ktx | 1.10.1 | Kotlin extensions |
+| androidx.fragment:fragment-ktx | 1.6.1 | Fragment lifecycle support |
+| com.google.android.material:material | 1.9.0 | BottomNavigationView |
+| com.google.android.gms:play-services-location | 21.0.1 | GPS/FusedLocationProviderClient |
+
+---
+
+## Version Compatibility
+
+| Component | Version | Notes |
+|-----------|---------|-------|
+| Android SDK | 33 (compile), 26 (min) | Target Android 13, min Android 8.0 |
+| Gradle | 8.5 | Build system |
+| Kotlin | 1.9.0 | Language version |
+| Java | 17 | Compilation/runtime target |
+| Android Gradle Plugin | 8.1.0 | Build tool |
+
+---
+
+## Testing Checklist
+
+✅ **Navigation**
+- Fragment tabs switch correctly
+- BottomNavigationView shows 4 items
+- Back navigation works properly
+
+✅ **Sensors**
+- Accelerometer updates on motion
+- Gyroscope updates on rotation
+- Magnetometer updates on orientation
+
+✅ **GPS**
+- Permission requests on first run
+- Location found within reasonable time
+- Coordinates update every ~1 second
+
+✅ **Lifecycle**
+- Sensors stop when app paused
+- Sensors resume when app resumed
+- No battery drain when app backgrounded
+
+---
+
+## Troubleshooting Guide
+
+### Issue: GPS Not Updating
+**Symptoms**: GPS status shows "Searching" indefinitely
+**Causes**: 
+- Permission not granted
+- Device indoors (weak GPS signal)
+- Location services disabled
+**Fix**:
+1. Check Settings > Location > Enabled
+2. Check app permissions granted
+3. Go outside for better signal
+
+### Issue: Sensors Show No Data
+**Symptoms**: Sensor values always 0 or don't update
+**Causes**:
+- Device lacks sensor
+- Fragment not in focus (lifecycle issue)
+- Listener not registered
+**Fix**:
+1. Verify `onResume()` called
+2. Check device has sensor: `adb shell dumpsys sensorservice`
+3. Ensure app in foreground
+
+### Issue: Build Fails - Resource Error
+**Symptoms**: XML attribute errors, AAPT errors
+**Causes**:
+- Invalid XML attribute values
+- Resource name conflicts
+**Fix**:
+1. Check `labelVisibilityMode` values
+2. Validate XML syntax
+3. Run `gradle clean` and rebuild
+
+### Issue: Permission Errors
+**Symptoms**: "Access denied" for location
+**Causes**:
+- Runtime permission not granted
+- Permission request not handled
+**Fix**:
+1. Verify `onRequestPermissionsResult()` called
+2. Check user granted permission in dialog
+3. Check `AndroidManifest.xml` has permission declared
+
+---
 ```
 Gradle Plugin (8.1.0) ↔ Gradle Version (8.5)
         ↓

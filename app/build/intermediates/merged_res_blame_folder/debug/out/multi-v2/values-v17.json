@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.simplebuttonapp-mergeDebugResources-20:/values-v17/values-v17.xml",
+            "outputFile": "com.example.simplebuttonapp-mergeDebugResources-37:/values-v17/values-v17.xml",
             "map": [
                 {
                     "source": "C:\\Users\\arunp\\.gradle\\caches\\transforms-3\\1e2e6004c2e64c83abab7733f4ba23f5\\transformed\\appcompat-1.6.0\\res\\values-v17\\values-v17.xml",

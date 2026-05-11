@@ -1,7 +1,7 @@
-# SimpleButtonApp - Android Kotlin Sensor & GPS Tracking Skill
+# SimpleButtonApp - Android Kotlin Sensor & GPS Tracking with Bottom Navigation
 
 ## Overview
-A complete Android application demonstrating real-time sensor data collection and GPS tracking with modern Android development practices. The app displays continuous streams of:
+A complete Android application demonstrating real-time sensor data collection and GPS tracking with modern Android development practices. Features a bottom navigation bar with four tabs, with the Dashboard tab displaying continuous streams of:
 - **Accelerometer** (X, Y, Z) - Motion/gravity detection
 - **Gyroscope** (X, Y, Z) - Rotation rate measurement
 - **Magnetometer** (X, Y, Z) - Magnetic field detection
@@ -13,6 +13,7 @@ A complete Android application demonstrating real-time sensor data collection an
 **Min API**: Android 8.0 (API Level 26)  
 **Build System**: Gradle 8.5  
 **Java Target**: Java 17  
+**Architecture**: Fragment-based navigation with BottomNavigationView
 
 ---
 
@@ -31,12 +32,23 @@ SimpleButtonApp/
 │       └── main/
 │           ├── AndroidManifest.xml
 │           ├── kotlin/com/example/simplebuttonapp/
-│           │   └── MainActivity.kt
+│           │   ├── MainActivity.kt                    # Navigation orchestrator
+│           │   ├── DashboardFragment.kt              # Sensor & GPS display
+│           │   ├── DevicesFragment.kt                # Placeholder
+│           │   ├── SettingsFragment.kt               # Placeholder
+│           │   └── AboutFragment.kt                  # Placeholder
 │           └── res/
-│               ├── layout/activity_main.xml
-│               ├── values/
-│               │   ├── colors.xml
-│               │   └── strings.xml
+│               ├── layout/
+│               │   ├── activity_main.xml             # Fragment container + BottomNav
+│               │   ├── fragment_dashboard.xml        # Sensor/GPS display
+│               │   ├── fragment_devices.xml
+│               │   ├── fragment_settings.xml
+│               │   └── fragment_about.xml
+│               ├── menu/
+│               │   └── bottom_menu.xml               # Navigation menu items
+│               └── values/
+│                   ├── colors.xml
+│                   └── strings.xml
 ```
 
 ### 2. **Build Configuration**
@@ -46,38 +58,115 @@ SimpleButtonApp/
 - **Java Compatibility**: Java 17 (modern features)
 - **Lint Checks**: Enabled for code quality
 - **Google Play Services**: Location API 21.0.1
+- **Material Design**: v1.9.0 (BottomNavigationView)
+- **Fragment Support**: androidx.fragment:fragment-ktx:1.6.1
 
 ### 3. **Dependencies**
 ```gradle
-androidx.appcompat:appcompat:1.6.0           # Backward compatibility
-androidx.core:core-ktx:1.10.1                # Kotlin extensions
+androidx.appcompat:appcompat:1.6.0                        # Backward compatibility
+androidx.core:core-ktx:1.10.1                            # Kotlin extensions
+androidx.fragment:fragment-ktx:1.6.1                     # Fragment lifecycle support
+com.google.android.material:material:1.9.0              # Material Design (BottomNav)
 com.google.android.gms:play-services-location:21.0.1  # GPS/Location
-junit:junit:4.13.2                           # Unit testing
-androidx.test.ext:junit:1.1.5                # AndroidX test runner
-androidx.test.espresso:espresso-core:3.5.1  # UI testing
+junit:junit:4.13.2                                      # Unit testing
+androidx.test.ext:junit:1.1.5                           # AndroidX test runner
+androidx.test.espresso:espresso-core:3.5.1             # UI testing
 ```
 
 ### 4. **Key Features Implemented**
 
-#### MainActivity.kt - Sensor & GPS Activity
+#### Architecture: Fragment-Based Navigation
+The app uses a bottom navigation bar with 4 tabs, each representing a different fragment:
+```
+┌──────────────────────────────────────┐
+│  FrameLayout (Fragment Container)    │
+│  - Dynamically shows DashboardFragment,
+│    DevicesFragment, SettingsFragment,
+│    or AboutFragment
+└──────────────────────────────────────┘
+┌────┬────┬────┬────────────────┐
+│ 📍 │ 📋 │ ⚙️ │ ℹ️  (Bottom Nav) │
+└────┴────┴────┴────────────────┘
+```
+
+#### MainActivity.kt - Navigation Orchestrator
 **Responsibilities**:
-- Accelerometer listener (TYPE_ACCELEROMETER)
-- Gyroscope listener (TYPE_GYROSCOPE)
-- Magnetometer listener (TYPE_MAGNETIC_FIELD)
-- GPS continuous location updates (1 second interval)
-- Runtime permission handling (Location)
-- Sensor lifecycle management (onResume/onPause)
+- Initialize BottomNavigationView
+- Handle fragment transactions
+- Load DashboardFragment on app startup
+- Switch between fragments when bottom nav items are tapped
+
+**Implementation**:
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+
+        // Load Dashboard as default
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, DashboardFragment())
+                .commit()
+        }
+
+        // Handle tab switches
+        bottomNavigation.setOnItemSelectedListener { item ->
+            val fragment = when (item.itemId) {
+                R.id.nav_dashboard -> DashboardFragment()
+                R.id.nav_devices -> DevicesFragment()
+                R.id.nav_settings -> SettingsFragment()
+                R.id.nav_about -> AboutFragment()
+                else -> DashboardFragment()
+            }
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
+
+            true
+        }
+    }
+}
+```
+
+#### DashboardFragment.kt - Sensor & GPS Data Display
+**Responsibilities**:
+- Implement SensorEventListener for accelerometer, gyroscope, magnetometer
+- Request and display GPS data via LocationCallback
+- Manage sensor/location lifecycle (onResume/onPause)
+- Handle runtime location permissions
 
 **Sensor Implementation**:
 ```kotlin
-class MainActivity : AppCompatActivity(), SensorEventListener {
+class DashboardFragment : Fragment(), SensorEventListener {
     private lateinit var sensorManager: SensorManager
     private var accelerometerSensor: Sensor? = null
     private var gyroscopeSensor: Sensor? = null
     private var magnetometerSensor: Sensor? = null
-    
-    // Sensors update via onSensorChanged() callback
-    // Values displayed in real-time with 3 decimal precision
+
+    override fun onSensorChanged(event: SensorEvent?) {
+        when (event?.sensor?.type) {
+            Sensor.TYPE_ACCELEROMETER -> {
+                accelXText.text = getString(R.string.sensor_value_format, "X", event.values[0])
+                accelYText.text = getString(R.string.sensor_value_format, "Y", event.values[1])
+                accelZText.text = getString(R.string.sensor_value_format, "Z", event.values[2])
+            }
+            Sensor.TYPE_GYROSCOPE -> {
+                gyroXText.text = getString(R.string.sensor_value_format, "X", event.values[0])
+                gyroYText.text = getString(R.string.sensor_value_format, "Y", event.values[1])
+                gyroZText.text = getString(R.string.sensor_value_format, "Z", event.values[2])
+            }
+            Sensor.TYPE_MAGNETIC_FIELD -> {
+                magXText.text = getString(R.string.sensor_value_format, "X", event.values[0])
+                magYText.text = getString(R.string.sensor_value_format, "Y", event.values[1])
+                magZText.text = getString(R.string.sensor_value_format, "Z", event.values[2])
+            }
+        }
+    }
 }
 ```
 
@@ -88,43 +177,88 @@ private lateinit var locationCallback: LocationCallback
 locationCallback = object : LocationCallback() {
     override fun onLocationResult(locationResult: LocationResult) {
         val location = locationResult.lastLocation
-        // Update UI with Latitude, Longitude, Accuracy, Altitude
+        if (location != null) {
+            latitudeText.text = getString(R.string.latitude_format, location.latitude)
+            longitudeText.text = getString(R.string.longitude_format, location.longitude)
+            accuracyText.text = getString(R.string.accuracy_format, location.accuracy)
+            altitudeText.text = getString(R.string.altitude_format, location.altitude)
+            gpsStatusText.text = getString(R.string.gps_found)
+        }
     }
 }
 
-// Continuous updates every 1 second
-val locationRequest = LocationRequest.Builder(
-    Priority.PRIORITY_HIGH_ACCURACY, 
-    1000  // milliseconds
-).build()
-
-fusedLocationClient.requestLocationUpdates(
-    locationRequest,
-    locationCallback,
-    Looper.getMainLooper()
-)
+// GPS updates every 1 second
+val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000).build()
+fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper())
 ```
 
 **Lifecycle**:
-- `onCreate()` - Initialize sensors and GPS callback
+- `onViewCreated()` - Initialize sensor manager, sensors, GPS callback
 - `onResume()` - Register sensor listeners, start GPS updates
 - `onPause()` - Unregister listeners, stop GPS updates (battery saving)
+- `onDestroy()` - Cleanup resources
 
-#### activity_main.xml - Scrollable Sensor Display
+#### PlaceholderFragments (Devices, Settings, About)
+Simple placeholder implementations for future enhancement:
+```kotlin
+class DevicesFragment : Fragment() {
+    override fun onCreateView(...): View = 
+        layoutInflater.inflate(R.layout.fragment_devices, container, false)
+}
+```
+
+#### activity_main.xml - Main Layout
+```xml
+<LinearLayout android:orientation="vertical">
+    <FrameLayout 
+        android:id="@+id/fragment_container"
+        android:layout_weight="1"/>  <!-- Takes available space -->
+    <BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        app:menu="@menu/bottom_menu"/>
+</LinearLayout>
+```
+
+#### fragment_dashboard.xml - Scrollable Sensor Display
 - **ScrollView**: Allows viewing all sensor data
-- **Three Sections**: Accelerometer (Green), Gyroscope (Blue), Magnetometer (Red), GPS
-- **Real-time Updates**: Labels with current values in X, Y, Z axes
+- **Four Sections**:
+  - Accelerometer (Green header, m/s²)
+  - Gyroscope (Blue header, rad/s)
+  - Magnetometer (Red header, μT)
+  - GPS Data (Blue status indicator)
+- **Real-time Updates**: Labels with current X, Y, Z values
 - **Responsive Layout**: Adapts to various screen sizes
 
+#### bottom_menu.xml - Navigation Menu
+```xml
+<menu>
+    <item android:id="@+id/nav_dashboard" 
+          android:icon="@android:drawable/ic_menu_compass"
+          android:title="@string/nav_dashboard"/>
+    <item android:id="@+id/nav_devices"
+          android:icon="@android:drawable/ic_menu_today"
+          android:title="@string/nav_devices"/>
+    <item android:id="@+id/nav_settings"
+          android:icon="@android:drawable/ic_menu_preferences"
+          android:title="@string/nav_settings"/>
+    <item android:id="@+id/nav_about"
+          android:icon="@android:drawable/ic_menu_info_details"
+          android:title="@string/nav_about"/>
+</menu>
+```
+
 #### Resource Files
-**strings.xml**:
-- Sensor section titles with units
-- GPS status messages
+**strings.xml** - All UI strings for localization and formatting:
+- Navigation labels (Dashboard, Devices, Settings, About)
+- Sensor section titles and axis labels
+- GPS status messages (Initializing, Searching, Found, Permission Denied)
 - Format strings with `formatted="false"` for multi-parameter strings
 
-**colors.xml**:
-- Status indicators: Green (Accelerometer), Blue (Gyroscope), Red (Magnetometer)
-- Blue for GPS status
+**colors.xml** - Color palette:
+- `status_green`: #FF4CAF50 (Accelerometer section)
+- `status_blue`: #FF2196F3 (Gyroscope & GPS)
+- `status_red`: #FFF44336 (Magnetometer section)
+- Material palette colors
 
 ### 5. **Permissions**
 ```xml
@@ -132,8 +266,9 @@ fusedLocationClient.requestLocationUpdates(
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 ```
-- Runtime permission requests on Android 6.0+
-- User prompt when app first runs
+- Runtime permission requests on Android 6.0+ (API 23+)
+- User prompt when app first accesses GPS
+- DashboardFragment handles permission logic
 
 ---
 
@@ -145,30 +280,36 @@ fusedLocationClient.requestLocationUpdates(
 | Accelerometer | TYPE_ACCELEROMETER | m/s² | X, Y, Z | SENSOR_DELAY_UI |
 | Gyroscope | TYPE_GYROSCOPE | rad/s | X, Y, Z | SENSOR_DELAY_UI |
 | Magnetometer | TYPE_MAGNETIC_FIELD | μT | X, Y, Z | SENSOR_DELAY_UI |
-| GPS | LocationUpdates | Various | - | 1 second |
+| GPS | LocationUpdates | Various | - | Every 1 second |
 
 ### GPS Tracking Features
 - **Continuous Updates**: Every 1 second
 - **High Accuracy Mode**: Uses GPS + WiFi + Cellular triangulation
 - **Data Provided**:
-  - Latitude (decimal degrees)
-  - Longitude (decimal degrees)
-  - Accuracy (uncertainty in meters)
-  - Altitude (height above sea level)
+  - Latitude (decimal degrees, 6 decimal precision)
+  - Longitude (decimal degrees, 6 decimal precision)
+  - Accuracy (uncertainty in meters, 1 decimal precision)
+  - Altitude (height above sea level in meters, 1 decimal precision)
 
-### Sensor Lifecycle
+### Fragment Lifecycle Integration
+Each fragment properly manages its sensor/location listeners:
+
 ```kotlin
 override fun onResume() {
+    super.onResume()
     // Register all three sensors
-    sensorManager.registerListener(this, accelerometerSensor, SENSOR_DELAY_UI)
-    sensorManager.registerListener(this, gyroscopeSensor, SENSOR_DELAY_UI)
-    sensorManager.registerListener(this, magnetometerSensor, SENSOR_DELAY_UI)
+    accelerometerSensor?.let { sensorManager.registerListener(this, it, SENSOR_DELAY_UI) }
+    gyroscopeSensor?.let { sensorManager.registerListener(this, it, SENSOR_DELAY_UI) }
+    magnetometerSensor?.let { sensorManager.registerListener(this, it, SENSOR_DELAY_UI) }
     
     // Start GPS updates
-    startLocationUpdates()
+    if (hasLocationPermission()) {
+        startLocationUpdates()
+    }
 }
 
 override fun onPause() {
+    super.onPause()
     // Unregister sensors to save battery
     sensorManager.unregisterListener(this)
     
@@ -178,26 +319,169 @@ override fun onPause() {
 ```
 
 ### Permission Handling
+DashboardFragment checks and requests location permission:
 ```kotlin
-if (ContextCompat.checkSelfPermission(...) != PERMISSION_GRANTED) {
-    ActivityCompat.requestPermissions(...)
+if (ContextCompat.checkSelfPermission(context, ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
+    requestPermissions(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION), CODE)
 } else {
     startLocationUpdates()
 }
 
-override fun onRequestPermissionsResult(...) {
-    if (granted) startLocationUpdates()
+override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    if (requestCode == CODE && grantResults.isNotEmpty() && grantResults[0] == PERMISSION_GRANTED) {
+        startLocationUpdates()
+    }
 }
 ```
 
 ---
 
-## What Was Corrected/Implemented
+## What Was Implemented
 
-### Update #1: Added Sensor Support
-**Added**: Accelerometer, Gyroscope, Magnetometer listeners
-**Implementation**: `SensorEventListener` interface with `onSensorChanged()` callback
-**Display**: Real-time values with 3 decimal precision
+### Phase 1: Basic Sensor Support
+- Added Accelerometer, Gyroscope, Magnetometer listeners
+- Real-time sensor value display with 3 decimal precision
+- Sensor lifecycle management in MainActivity
+
+### Phase 2: GPS Tracking
+- Added LocationCallback for continuous GPS updates
+- Implemented 1-second update interval using LocationRequest
+- Display Latitude, Longitude, Accuracy, Altitude
+- Runtime permission handling for location access
+
+### Phase 3: Fragment-Based Navigation (Current)
+- Refactored single-activity architecture to multi-fragment design
+- Moved all sensor/GPS logic to DashboardFragment
+- Created BottomNavigationView with 4 tabs
+- Implemented MainActivity as navigation orchestrator
+- Added placeholder fragments for Devices, Settings, About
+- Updated build dependencies (Material Design, Fragment support)
+- Fixed XML layout attribute (`labelVisibilityMode="auto"`)
+
+---
+
+## Build & Deployment
+
+### Build Command
+```bash
+cd d:\code\andriod_tool\SimpleButtonApp
+gradle clean assembleDebug
+```
+
+### Install on Device
+```bash
+adb install -r app\build\outputs\apk\debug\app-debug.apk
+```
+
+### Launch App
+```bash
+adb shell am start -n com.example.simplebuttonapp/.MainActivity
+```
+
+### Screenshot Verification
+```bash
+adb shell screencap -p /sdcard/screenshot.png
+adb pull /sdcard/screenshot.png
+```
+
+---
+
+## Testing Checklist
+
+✅ **Navigation**
+- [x] App launches with Dashboard tab visible
+- [x] Bottom navigation shows 4 icons
+- [x] Tapping tabs switches fragments
+- [x] Dashboard tab shows sensor data
+
+✅ **Sensor Data**
+- [x] Accelerometer values display and update (m/s²)
+- [x] Gyroscope values display and update (rad/s)
+- [x] Magnetometer values display and update (μT)
+- [x] All X, Y, Z axes populated
+
+✅ **GPS Data**
+- [x] GPS status shows "Searching..." initially
+- [x] GPS status changes to "Found ✓" when location acquired
+- [x] Latitude displays with 6 decimal precision
+- [x] Longitude displays with 6 decimal precision
+- [x] Accuracy shows with ± format (meters)
+- [x] Altitude displays with elevation (meters)
+- [x] GPS updates every ~1 second
+
+✅ **Lifecycle**
+- [x] Sensors start on app launch
+- [x] Sensors stop when app paused (battery optimization)
+- [x] GPS starts on app launch (with permission)
+- [x] GPS stops when app paused
+
+---
+
+## Future Enhancements
+
+### DevicesFragment
+- Display list of connected Bluetooth/USB devices
+- Device connection management UI
+- Signal strength indicators
+
+### SettingsFragment
+- Sensor update rate configuration (SENSOR_DELAY_UI, FASTEST, etc.)
+- GPS accuracy mode selection (HIGH_ACCURACY, BALANCED, LOW_POWER)
+- Data logging enable/disable toggle
+- File export options
+
+### AboutFragment
+- App version and build info
+- Build timestamp
+- Developer credits
+- Open source license information
+- Links to documentation/repository
+
+### Dashboard Enhancements
+- Graph visualization for sensor data over time
+- Live compass using magnetometer
+- Elevation change chart using GPS altitude
+- Data statistics (min/max/average values)
+- Real-time motion detection indicators
+
+---
+
+## ProGuard Rules
+The app includes ProGuard rules for code obfuscation in release builds:
+```
+-keep class android.**, androidx.**, com.google.android.gms.**, com.example.simplebuttonapp.**
+-keep class * implements java.io.Serializable
+-keepclassmembers class * implements java.io.Serializable { static final long serialVersionUID; private static final java.io.ObjectStreamField[] serialPersistentFields; private void writeObject(...); private void readObject(...); java.lang.Object writeReplace(); java.lang.Object readResolve(); }
+-keepattributes Exceptions, InnerClasses, Signature, *Annotation*
+```
+
+---
+
+## Debugging Tips
+
+### Enable Debug Logging
+Check Logcat for app logs:
+```bash
+adb logcat | grep simplebuttonapp
+```
+
+### Common Issues & Solutions
+
+**GPS Location Not Updating**
+- Check: Is permission granted in device settings?
+- Check: Is device outdoors or in good GPS coverage?
+- Check: Is Location Services enabled on device?
+
+**Sensors Showing No Data**
+- Check: Does device have required sensors?
+- Check: Is app in foreground (sensors disabled when app paused)?
+
+**Build Failures**
+- Run: `gradle clean` to remove cached build artifacts
+- Check: SDK installation in Android Studio
+- Verify: Gradle daemon not stuck (`gradle --stop`)
+
+---
 
 ### Update #2: GPS Continuous Tracking
 **Changed From**: One-time GPS retrieval (`getCurrentLocation()`)

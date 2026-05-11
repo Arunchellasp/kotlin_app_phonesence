@@ -17,6 +17,8 @@ id accelYText
 id accelZText
 id accuracyText
 id altitudeText
+id bottom_navigation
+id fragment_container
 id gpsStatusText
 id gyroXText
 id gyroYText
@@ -26,7 +28,13 @@ id longitudeText
 id magXText
 id magYText
 id magZText
+id nav_about
+id nav_dashboard
+id nav_devices
+id nav_settings
 layout activity_main
+layout fragment_dashboard
+menu bottom_menu
 string accel_x_label
 string accel_y_label
 string accel_z_label
@@ -54,6 +62,10 @@ string mag_x_label
 string mag_y_label
 string mag_z_label
 string magnetometer_title
+string nav_about
+string nav_dashboard
+string nav_devices
+string nav_settings
 string no_data
 string permission_denied
 string sensor_value_format

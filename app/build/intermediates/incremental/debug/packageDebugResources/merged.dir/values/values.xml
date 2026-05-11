@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="button_primary">#FF6200EE</color>
+    <color name="button_text">#FFFFFFFF</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="status_blue">#FF2196F3</color>
+    <color name="status_green">#FF4CAF50</color>
+    <color name="status_red">#FFF44336</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="white">#FFFFFFFF</color>
+    <string name="accel_x_label">X:</string>
+    <string name="accel_y_label">Y:</string>
+    <string name="accel_z_label">Z:</string>
+    <string name="accelerometer_title">Accelerometer (m/s²)</string>
+    <string name="accuracy_format">±%.1f m</string>
+    <string name="accuracy_label">Accuracy (m):</string>
+    <string name="altitude_format">%.1f m</string>
+    <string name="altitude_label">Altitude (m):</string>
+    <string name="app_name">SimpleButtonApp</string>
+    <string name="gps_error">Error getting GPS location</string>
+    <string name="gps_found">GPS Location Found ✓</string>
+    <string name="gps_initializing">Initializing GPS...</string>
+    <string name="gps_not_found">GPS Location Not Found</string>
+    <string name="gps_searching">Searching for GPS signal...</string>
+    <string name="gps_section_title">GPS Data</string>
+    <string name="gyro_x_label">X:</string>
+    <string name="gyro_y_label">Y:</string>
+    <string name="gyro_z_label">Z:</string>
+    <string name="gyroscope_title">Gyroscope (rad/s)</string>
+    <string name="latitude_format">%.6f°</string>
+    <string name="latitude_label">Latitude:</string>
+    <string name="longitude_format">%.6f°</string>
+    <string name="longitude_label">Longitude:</string>
+    <string name="mag_x_label">X:</string>
+    <string name="mag_y_label">Y:</string>
+    <string name="mag_z_label">Z:</string>
+    <string name="magnetometer_title">Magnetometer (μT)</string>
+    <string name="no_data">-- No Data --</string>
+    <string name="permission_denied">Location permission denied</string>
+    <string formatted="false" name="sensor_value_format">%s: %.3f</string>
+</resources>

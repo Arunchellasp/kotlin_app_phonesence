@@ -1,0 +1,50 @@
+<resources>
+
+    <string name="app_name">SimpleButtonApp</string>
+
+    <!-- Accelerometer -->
+    <string name="accelerometer_title">Accelerometer (m/s²)</string>
+    <string name="accel_x_label">X:</string>
+    <string name="accel_y_label">Y:</string>
+    <string name="accel_z_label">Z:</string>
+
+    <!-- Gyroscope -->
+    <string name="gyroscope_title">Gyroscope (rad/s)</string>
+    <string name="gyro_x_label">X:</string>
+    <string name="gyro_y_label">Y:</string>
+    <string name="gyro_z_label">Z:</string>
+
+    <!-- Magnetometer -->
+    <string name="magnetometer_title">Magnetometer (μT)</string>
+    <string name="mag_x_label">X:</string>
+    <string name="mag_y_label">Y:</string>
+    <string name="mag_z_label">Z:</string>
+
+    <!-- Sensor Value Format -->
+    <string name="sensor_value_format" formatted="false">%s: %.3f</string>
+
+    <!-- GPS Data -->
+    <string name="gps_section_title">GPS Data</string>
+    <string name="gps_initializing">Initializing GPS...</string>
+    <string name="gps_searching">Searching for GPS signal...</string>
+    <string name="gps_found">GPS Location Found ✓</string>
+    <string name="gps_not_found">GPS Location Not Found</string>
+    <string name="gps_error">Error getting GPS location</string>
+    <string name="permission_denied">Location permission denied</string>
+
+    <!-- GPS Labels -->
+    <string name="latitude_label">Latitude:</string>
+    <string name="longitude_label">Longitude:</string>
+    <string name="accuracy_label">Accuracy (m):</string>
+    <string name="altitude_label">Altitude (m):</string>
+
+    <!-- GPS Data Format Strings -->
+    <string name="latitude_format">%.6f°</string>
+    <string name="longitude_format">%.6f°</string>
+    <string name="accuracy_format">±%.1f m</string>
+    <string name="altitude_format">%.1f m</string>
+
+    <!-- General -->
+    <string name="no_data">-- No Data --</string>
+
+</resources>

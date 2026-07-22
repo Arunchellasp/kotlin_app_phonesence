@@ -1,4 +1,4 @@
-# ProGuard rules for SimpleButtonApp
+# ProGuard rules for homosep
 
 # Keep Android framework classes
 -keep class android.** { *; }
@@ -14,7 +14,7 @@
 -dontwarn com.google.android.gms.**
 
 # Keep app package
--keep class com.example.simplebuttonapp.** { *; }
+-keep class com.example.homosep.** { *; }
 
 # Remove logging in release builds
 -assumenosideeffects class android.util.Log {

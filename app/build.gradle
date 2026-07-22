@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    namespace 'com.example.simplebuttonapp'
+    namespace 'com.example.homosep'
 
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.simplebuttonapp"
+        applicationId "com.example.homosep"
         minSdk 26
         targetSdk 33
         versionCode 1
@@ -36,6 +36,10 @@ android {
         checkReleaseBuilds true
         warningsAsErrors true
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -55,6 +59,14 @@ dependencies {
 
     // MQTT client
     implementation "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
+
+    // USB serial drivers for OTG USB-to-TTL adapters
+    implementation "com.github.mik3y:usb-serial-for-android:3.10.0"
+    
+    // Media3 (ExoPlayer) for RTSP streams
+    implementation "androidx.media3:media3-exoplayer:1.1.1"
+    implementation "androidx.media3:media3-exoplayer-rtsp:1.1.1"
+    implementation "androidx.media3:media3-ui:1.1.1"
     
     // Testing
     testImplementation "junit:junit:4.13.2"

@@ -1,14 +1,14 @@
-# SimpleButtonApp Skill
+# homosep Skill
 
 ## Purpose
 
-Use this skill when working on SimpleButtonApp, a Kotlin Android app that displays live device sensor data and GPS location through a fragment-based UI.
+Use this skill when working on homosep, a Kotlin Android app that displays live device sensor data and GPS location through a fragment-based UI.
 
-The current codebase is a BottomNavigationView app with a Dashboard tab for sensors and GPS plus three placeholder tabs.
+The current codebase is a BottomNavigationView app with Dashboard sensor/GPS data, Devices MQTT GPS publishing, Settings WebView content, and About USB serial communication.
 
 ## Current Application
 
-SimpleButtonApp contains:
+homosep contains:
 
 - One activity: `MainActivity`
 - Four fragments:
@@ -20,7 +20,8 @@ SimpleButtonApp contains:
 - One activity layout: `activity_main.xml`
 - One dashboard layout: `fragment_dashboard.xml`
 - One devices layout: `fragment_devices.xml`
-  - One settings layout: `fragment_settings.xml`
+- One settings layout: `fragment_settings.xml`
+- One about layout: `fragment_about.xml`
 - One bottom navigation menu: `bottom_menu.xml`
 
 ## Architecture
@@ -35,7 +36,7 @@ MainActivity
     `-- About     -> AboutFragment
 ```
 
-`MainActivity` owns navigation only. `DashboardFragment` owns sensor display behavior. `DevicesFragment` owns the MQTT UI. `MqttGpsPublisherManager` owns MQTT connection state, GPS updates, and continuous publishing so switching fragments does not interrupt active publishing. `SettingsFragment` owns the embedded WebView for `http://10.3.3.31:5000`.
+`MainActivity` owns navigation only. `DashboardFragment` owns sensor display behavior. `DevicesFragment` owns the MQTT UI. `MqttGpsPublisherManager` owns MQTT connection state, GPS updates, and continuous publishing so switching fragments does not interrupt active publishing. `SettingsFragment` owns the embedded WebView for `http://10.3.3.31:5000`. `AboutFragment` owns the USB serial console.
 
 ## Dashboard Behavior
 
@@ -113,6 +114,7 @@ implementation "com.google.android.gms:play-services-location:21.0.1"
 implementation "com.google.android.material:material:1.9.0"
 implementation "androidx.fragment:fragment-ktx:1.6.1"
 implementation "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
+implementation "com.github.mik3y:usb-serial-for-android:3.10.0"
 
 testImplementation "junit:junit:4.13.2"
 androidTestImplementation "androidx.test.ext:junit:1.1.5"
@@ -123,9 +125,25 @@ androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
 
 `fragment_dashboard.xml` uses a `ScrollView` with vertical sections for each sensor group and GPS.
 
-`strings.xml` contains labels and format strings for Dashboard and navigation text. Some current string values contain encoding artifacts such as `m/sÂ²`, `Î¼T`, `Â°`, `Â±`, and `âœ“`. These appear to be mojibake versions of `m/s²`, `µT`, `°`, `±`, and a check mark. Fixing those is a source/resource cleanup task, not a documentation task.
+`strings.xml` contains labels and format strings for Dashboard and navigation text. Some current string values contain encoding artifacts such as `m/sÃ‚Â²`, `ÃŽÂ¼T`, `Ã‚Â°`, `Ã‚Â±`, and `Ã¢Å“â€œ`. These appear to be mojibake versions of `m/sÂ²`, `ÂµT`, `Â°`, `Â±`, and a check mark. Fixing those is a source/resource cleanup task, not a documentation task.
 
-`AboutFragment` currently hard-codes placeholder text in Kotlin instead of using string resources.
+`AboutFragment` inflates `fragment_about.xml` and provides USB serial communication controls.
+
+## About USB Serial Console
+
+`AboutFragment` supports external microcontrollers connected through OTG USB-to-TTL converters.
+
+Controls:
+
+- Scan USB Devices
+- Device/port selector
+- Baud rate selector
+- Connect and Disconnect
+- Message input
+- Send Message
+- Received Data viewer
+
+The serial port is opened as 8 data bits, 1 stop bit, no parity. Receive data is read through `SerialInputOutputManager`.
 
 ## Settings WebView
 
@@ -208,5 +226,5 @@ gradle clean assembleDebug
 gradle test
 gradle connectedAndroidTest
 adb install -r app/build/outputs/apk/debug/app-debug.apk
-adb shell am start -n com.example.simplebuttonapp/.MainActivity
+adb shell am start -n com.example.homosep/.MainActivity
 ```

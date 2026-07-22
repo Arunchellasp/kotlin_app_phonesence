@@ -1,15 +1,15 @@
-# SimpleButtonApp Codebase Overview
+# homosep Codebase Overview
 
 ## What This App Is
 
-SimpleButtonApp is a Kotlin Android app for displaying real-time device sensor readings and GPS location data. It uses a single activity with bottom navigation and multiple fragments.
+homosep is a Kotlin Android app for displaying real-time device sensor readings and GPS location data. It uses a single activity with bottom navigation and multiple fragments.
 
 This overview reflects the current source code in the repository.
 
 ## High-Level Structure
 
 ```text
-SimpleButtonApp
+homosep
 |-- MainActivity
 |   `-- Hosts bottom navigation and swaps fragments
 |
@@ -29,7 +29,7 @@ SimpleButtonApp
 |   `-- Interactive WebView for http://10.3.3.31:5000
 |
 `-- AboutFragment
-    `-- Placeholder TextView
+    `-- USB serial console for OTG USB-to-TTL adapters
 ```
 
 ## Authored Files
@@ -45,16 +45,18 @@ CODEBASE_OVERVIEW.md
 app/build.gradle
 app/proguard-rules.pro
 app/src/main/AndroidManifest.xml
-app/src/main/kotlin/com/example/simplebuttonapp/MainActivity.kt
-app/src/main/kotlin/com/example/simplebuttonapp/DashboardFragment.kt
-app/src/main/kotlin/com/example/simplebuttonapp/DevicesFragment.kt
-app/src/main/kotlin/com/example/simplebuttonapp/MqttGpsPublisherManager.kt
-app/src/main/kotlin/com/example/simplebuttonapp/SettingsFragment.kt
-app/src/main/kotlin/com/example/simplebuttonapp/AboutFragment.kt
+app/src/main/kotlin/com/example/homosep/MainActivity.kt
+app/src/main/kotlin/com/example/homosep/DashboardFragment.kt
+app/src/main/kotlin/com/example/homosep/DevicesFragment.kt
+app/src/main/kotlin/com/example/homosep/MqttGpsPublisherManager.kt
+app/src/main/kotlin/com/example/homosep/SettingsFragment.kt
+app/src/main/kotlin/com/example/homosep/AboutFragment.kt
 app/src/main/res/layout/activity_main.xml
 app/src/main/res/layout/fragment_dashboard.xml
 app/src/main/res/layout/fragment_devices.xml
 app/src/main/res/layout/fragment_settings.xml
+app/src/main/res/layout/fragment_about.xml
+app/src/main/res/xml/device_filter.xml
 app/src/main/res/xml/network_security_config.xml
 app/src/main/res/menu/bottom_menu.xml
 app/src/main/res/values/colors.xml
@@ -65,7 +67,7 @@ Generated files live under `app/build/` and should not be used as source of trut
 
 ## MainActivity
 
-File: `app/src/main/kotlin/com/example/simplebuttonapp/MainActivity.kt`
+File: `app/src/main/kotlin/com/example/homosep/MainActivity.kt`
 
 `MainActivity` is the navigation host.
 
@@ -84,7 +86,7 @@ It does the following:
 
 ## DashboardFragment
 
-File: `app/src/main/kotlin/com/example/simplebuttonapp/DashboardFragment.kt`
+File: `app/src/main/kotlin/com/example/homosep/DashboardFragment.kt`
 
 `DashboardFragment` is the main functional fragment.
 
@@ -159,7 +161,7 @@ Current limitation:
 
 ## DevicesFragment
 
-File: `app/src/main/kotlin/com/example/simplebuttonapp/DevicesFragment.kt`
+File: `app/src/main/kotlin/com/example/homosep/DevicesFragment.kt`
 
 `DevicesFragment` provides the MQTT GPS publishing UI.
 
@@ -185,7 +187,7 @@ The fragment delegates long-running work to `MqttGpsPublisherManager`.
 
 ## MqttGpsPublisherManager
 
-File: `app/src/main/kotlin/com/example/simplebuttonapp/MqttGpsPublisherManager.kt`
+File: `app/src/main/kotlin/com/example/homosep/MqttGpsPublisherManager.kt`
 
 `MqttGpsPublisherManager` is a singleton that keeps MQTT, GPS, and publishing state outside fragment lifecycle. This prevents active publishing from stopping when the user switches tabs.
 
@@ -199,7 +201,7 @@ It collects GPS through `FusedLocationProviderClient`, connects to the broker wi
 
 ## SettingsFragment
 
-File: `app/src/main/kotlin/com/example/simplebuttonapp/SettingsFragment.kt`
+File: `app/src/main/kotlin/com/example/homosep/SettingsFragment.kt`
 
 `SettingsFragment` loads this local web app in a full-screen WebView:
 
@@ -209,15 +211,23 @@ http://10.3.3.31:5000
 
 The WebView enables JavaScript, DOM storage, wide viewport layout, and in-WebView navigation. The app includes `network_security_config.xml` so Android allows cleartext HTTP traffic to `10.3.3.31`.
 
-## Placeholder Fragments
+## AboutFragment
 
-Files:
+File: `app/src/main/kotlin/com/example/homosep/AboutFragment.kt`
 
-- `AboutFragment.kt`
+`AboutFragment` provides USB serial communication for externally connected microcontrollers through OTG USB-to-TTL converters.
 
-Each fragment currently returns a `TextView` from `onCreateView(...)` with hard-coded placeholder text and padding.
+It can:
 
-These are intentionally minimal and are candidates for future XML layouts and resource-backed strings.
+- Scan attached USB serial devices.
+- Select a device/port.
+- Select baud rate.
+- Request Android USB device permission.
+- Connect and disconnect.
+- Send typed messages.
+- Display received serial data.
+
+The implementation uses `usb-serial-for-android` and `SerialInputOutputManager`.
 
 ## Layouts
 
@@ -258,6 +268,10 @@ Scrollable MQTT publisher layout with:
 
 Full-screen WebView used by `SettingsFragment`.
 
+### fragment_about.xml
+
+USB serial console layout with scan/connect controls, baud selection, send input, and received-data viewer.
+
 ## Navigation Menu
 
 File: `app/src/main/res/menu/bottom_menu.xml`
@@ -286,7 +300,7 @@ Contains:
 
 Known issue:
 
-- Some unit symbols are encoded incorrectly in the current XML. For example, `m/sÂ²` should likely be `m/s²`, and `Î¼T` should likely be `µT`.
+- Some unit symbols are encoded incorrectly in the current XML. For example, `m/sÃ‚Â²` should likely be `m/sÂ²`, and `ÃŽÂ¼T` should likely be `ÂµT`.
 
 ### colors.xml
 

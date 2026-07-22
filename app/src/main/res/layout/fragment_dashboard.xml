@@ -1,350 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:clipToPadding="false">
 
         <!-- Accelerometer Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/accelerometer_title"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/status_green"
-            android:layout_marginBottom="12dp"/>
-
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/accel_x_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/accelXText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/accel_y_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/accelYText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/accel_z_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/accelZText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/accelerometer_title"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textColor="?attr/colorPrimary"
+                    android:layout_marginBottom="12dp"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/accel_x_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/accelXText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/accel_y_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/accelYText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/accel_z_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/accelZText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Gyroscope Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gyroscope_title"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/status_blue"
-            android:layout_marginBottom="12dp"/>
-
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/gyro_x_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/gyroXText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/gyro_y_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/gyroYText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/gyro_z_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/gyroZText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gyroscope_title"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textColor="?attr/colorPrimary"
+                    android:layout_marginBottom="12dp"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/gyro_x_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/gyroXText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/gyro_y_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/gyroYText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/gyro_z_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/gyroZText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Magnetometer Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/magnetometer_title"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/status_red"
-            android:layout_marginBottom="12dp"/>
-
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/mag_x_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/magXText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/mag_y_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/magYText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/mag_z_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/magZText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/magnetometer_title"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textColor="?attr/colorPrimary"
+                    android:layout_marginBottom="12dp"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/mag_x_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/magXText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/mag_y_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/magYText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/mag_z_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/magZText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- GPS Data Section -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gps_section_title"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp"/>
-
-        <TextView
-            android:id="@+id/gpsStatusText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gps_initializing"
-            android:textSize="14sp"
-            android:textColor="@color/status_blue"
-            android:layout_marginBottom="12dp"/>
-
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/latitude_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/latitudeText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+            android:layout_marginBottom="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/longitude_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/longitudeText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+                android:orientation="vertical"
+                android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="8dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/accuracy_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/accuracyText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gps_section_title"
+                    android:textAppearance="?attr/textAppearanceTitleMedium"
+                    android:textColor="?attr/colorPrimary"
+                    android:layout_marginBottom="4dp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/altitude_label"
-                android:textSize="13sp"
-                android:textStyle="bold"/>
-            <TextView
-                android:id="@+id/altitudeText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/no_data"
-                android:textSize="13sp"
-                android:gravity="end"/>
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/gpsStatusText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gps_initializing"
+                    android:textAppearance="?attr/textAppearanceLabelMedium"
+                    android:textColor="?attr/colorSecondary"
+                    android:layout_marginBottom="12dp"/>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/latitude_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/latitudeText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/longitude_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/longitudeText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginBottom="8dp">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/accuracy_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/accuracyText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                    <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="@string/altitude_label" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                    <TextView android:id="@+id/altitudeText" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/no_data" android:textAppearance="?attr/textAppearanceBodyMedium"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

@@ -14,4 +14,13 @@
     <color name="status_blue">#FF2196F3</color>
     <color name="status_green">#FF4CAF50</color>
     <color name="status_red">#FFF44336</color>
+    <color name="md_theme_primary">#3F51B5</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#D8E2FF</color>
+    <color name="md_theme_onPrimaryContainer">#001A41</color>
+    
+    <color name="md_theme_secondary">#5C5D72</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#E1E0F9</color>
+    <color name="md_theme_onSecondaryContainer">#191A2C</color>
 </resources>

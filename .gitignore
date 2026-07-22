@@ -1,0 +1,15 @@
+# Android SDK
+sdk/
+.temp/
+
+# JDK
+jdk-17.0.10+7/
+jdk17.zip
+
+# Gradle
+gradle.zip
+tools.zip
+
+# Build files
+build/
+.gradle/

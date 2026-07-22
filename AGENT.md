@@ -1,7 +1,7 @@
 ---
-name: SimpleButtonApp Android Agent
+name: homosep Android Agent
 description: >
-  Project-specific guidance for SimpleButtonApp, a Kotlin Android application
+  Project-specific guidance for homosep, a Kotlin Android application
   with BottomNavigationView, fragment-based navigation, real-time sensor
   readings, and fused GPS location updates.
 applyTo:
@@ -24,23 +24,23 @@ capabilities:
 mode: autonomous
 ---
 
-# SimpleButtonApp Android Agent
+# homosep Android Agent
 
 ## Project Summary
 
-SimpleButtonApp is a Kotlin Android app that uses a single `MainActivity` as a navigation host. The activity displays four bottom navigation tabs:
+homosep is a Kotlin Android app that uses a single `MainActivity` as a navigation host. The activity displays four bottom navigation tabs:
 
 - Dashboard
 - Devices
 - Settings
 - About
 
-The Dashboard tab displays live accelerometer, gyroscope, magnetometer, and GPS data. The Devices tab provides MQTT connectivity for publishing GPS data to a device-specific topic. The Settings tab embeds an interactive WebView for `http://10.3.3.31:5000`. About currently renders simple placeholder `TextView` content.
+The Dashboard tab displays live accelerometer, gyroscope, magnetometer, and GPS data. The Devices tab provides MQTT connectivity for publishing GPS data to a device-specific topic. The Settings tab embeds an interactive WebView for `http://10.3.3.31:5000`. The About tab provides a USB serial console for OTG USB-to-TTL adapters.
 
 ## Current Source Map
 
 ```text
-SimpleButtonApp/
+homosep/
 |-- build.gradle
 |-- settings.gradle
 |-- gradle.properties
@@ -49,7 +49,7 @@ SimpleButtonApp/
     |-- proguard-rules.pro
     |-- src/main/
         |-- AndroidManifest.xml
-        |-- kotlin/com/example/simplebuttonapp/
+        |-- kotlin/com/example/homosep/
         |   |-- MainActivity.kt
         |   |-- DashboardFragment.kt
         |   |-- DevicesFragment.kt
@@ -61,9 +61,11 @@ SimpleButtonApp/
             |   |-- activity_main.xml
             |   |-- fragment_dashboard.xml
             |   |-- fragment_devices.xml
-            |   `-- fragment_settings.xml
+            |   |-- fragment_settings.xml
+            |   `-- fragment_about.xml
             |-- xml/
-            |   `-- network_security_config.xml
+            |   |-- network_security_config.xml
+            |   `-- device_filter.xml
             |-- menu/
             |   `-- bottom_menu.xml
             `-- values/
@@ -124,9 +126,21 @@ WebView behavior:
 
 The app uses `network_security_config.xml` to permit cleartext HTTP traffic to `10.3.3.31`.
 
-### Placeholder Fragments
+### AboutFragment.kt
 
-`AboutFragment` creates a `TextView` directly in Kotlin. It does not currently have an XML layout file.
+`AboutFragment` is a USB serial console for externally connected microcontrollers through OTG USB-to-TTL converters.
+
+Capabilities:
+
+- Scans supported USB serial adapters.
+- Lets the user select a discovered device/port.
+- Lets the user select a baud rate.
+- Requests Android USB device permission.
+- Opens the selected serial port with 8 data bits, 1 stop bit, and no parity.
+- Sends typed messages over serial.
+- Displays received serial data.
+
+The implementation uses `com.github.mik3y:usb-serial-for-android`.
 
 ### DevicesFragment.kt
 
@@ -167,9 +181,9 @@ The app is configured with:
 | --- | --- |
 | Kotlin | 1.9.0 |
 | Android Gradle Plugin | 8.1.0 |
-| Gradle project name | SimpleButtonApp |
-| Namespace | com.example.simplebuttonapp |
-| Application ID | com.example.simplebuttonapp |
+| Gradle project name | homosep |
+| Namespace | com.example.homosep |
+| Application ID | com.example.homosep |
 | compileSdk | 33 |
 | targetSdk | 33 |
 | minSdk | 26 |
@@ -184,6 +198,7 @@ Main dependencies:
 - `com.google.android.material:material:1.9.0`
 - `com.google.android.gms:play-services-location:21.0.1`
 - `org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5`
+- `com.github.mik3y:usb-serial-for-android:3.10.0`
 - JUnit and Espresso test dependencies
 
 ## Development Guidelines
@@ -203,7 +218,7 @@ gradle clean assembleDebug
 gradle test
 gradle connectedAndroidTest
 adb install -r app/build/outputs/apk/debug/app-debug.apk
-adb shell am start -n com.example.simplebuttonapp/.MainActivity
+adb shell am start -n com.example.homosep/.MainActivity
 ```
 
 ## Known Documentation Notes

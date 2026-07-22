@@ -12,9 +12,14 @@
         android:title="@string/nav_devices"/>
 
     <item
-        android:id="@+id/nav_settings"
+        android:id="@+id/nav_rtsp"
+        android:icon="@android:drawable/ic_media_play"
+        android:title="@string/nav_rtsp"/>
+
+    <item
+        android:id="@+id/nav_tracking"
         android:icon="@android:drawable/ic_menu_preferences"
-        android:title="@string/nav_settings"/>
+        android:title="@string/nav_tracking"/>
 
     <item
         android:id="@+id/nav_about"

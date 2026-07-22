@@ -1,14 +1,14 @@
-# SimpleButtonApp Configuration
+# homosep Configuration
 
 ## Project Identity
 
 | Setting | Value |
 | --- | --- |
-| Project name | SimpleButtonApp |
+| Project name | homosep |
 | Module | app |
-| Package namespace | com.example.simplebuttonapp |
-| Application ID | com.example.simplebuttonapp |
-| App label | SimpleButtonApp |
+| Package namespace | com.example.homosep |
+| Application ID | com.example.homosep |
+| App label | homosep |
 | Version code | 1 |
 | Version name | 1.0 |
 
@@ -43,7 +43,7 @@ buildscript {
 File: `settings.gradle`
 
 ```gradle
-rootProject.name = "SimpleButtonApp"
+rootProject.name = "homosep"
 include ':app'
 ```
 
@@ -78,7 +78,7 @@ File: `app/build.gradle`
 | --- | --- |
 | Plugin | `com.android.application` |
 | Plugin | `kotlin-android` |
-| namespace | `com.example.simplebuttonapp` |
+| namespace | `com.example.homosep` |
 | compileSdk | 33 |
 | minSdk | 26 |
 | targetSdk | 33 |
@@ -103,6 +103,7 @@ Runtime dependencies:
 | `com.google.android.material:material:1.9.0` | `BottomNavigationView` |
 | `androidx.fragment:fragment-ktx:1.6.1` | Fragment support |
 | `org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5` | MQTT broker connectivity |
+| `com.github.mik3y:usb-serial-for-android:3.10.0` | USB serial drivers for OTG USB-to-TTL adapters |
 
 Test dependencies:
 
@@ -142,6 +143,7 @@ The manifest declares:
 | `fragment_dashboard.xml` | Scrollable sensor and GPS display |
 | `fragment_devices.xml` | MQTT broker/device-name input and GPS publish controls |
 | `fragment_settings.xml` | Full-screen WebView for `http://10.3.3.31:5000` |
+| `fragment_about.xml` | USB serial console UI |
 
 There is no XML layout for About. That fragment currently creates a placeholder `TextView` directly in Kotlin.
 
@@ -150,6 +152,7 @@ There is no XML layout for About. That fragment currently creates a placeholder 
 | File | Purpose |
 | --- | --- |
 | `network_security_config.xml` | Allows cleartext HTTP traffic to `10.3.3.31` |
+| `device_filter.xml` | USB attach metadata target; runtime probing selects supported serial devices |
 
 ### Menu
 
@@ -213,12 +216,12 @@ Install and launch:
 
 ```bash
 adb install -r app/build/outputs/apk/debug/app-debug.apk
-adb shell am start -n com.example.simplebuttonapp/.MainActivity
+adb shell am start -n com.example.homosep/.MainActivity
 ```
 
 ## Configuration Risks and Follow-Ups
 
 - Runtime permission handling should be modernized so GPS starts immediately after a permission grant.
-- Placeholder fragment text should move into `strings.xml`.
+- Add serial line-ending options such as none, LF, CRLF if connected firmware expects them.
 - Mojibake in string resources should be corrected.
 - The project has build outputs checked into the workspace; generated files under `app/build/` should normally be ignored by version control.

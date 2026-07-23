@@ -48,10 +48,11 @@
     <string name="no_data">-- No Data --</string>
 
     <!-- MQTT Devices -->
-    <string name="mqtt_title">MQTT GPS Publisher</string>
+    <string name="mqtt_title">Vehicle Setting</string>
     <string name="mqtt_broker_hint">Broker IP or link</string>
     <string name="mqtt_port_hint">Port</string>
-    <string name="mqtt_device_name_hint">Device name</string>
+    <string name="mqtt_device_name_hint">Vehicle number</string>
+    <string name="mqtt_vehicle_id_hint">Vehicle ID</string>
     <string name="mqtt_username_hint">Username (optional)</string>
     <string name="mqtt_password_hint">Password (optional)</string>
     <string name="mqtt_connect">Connect</string>

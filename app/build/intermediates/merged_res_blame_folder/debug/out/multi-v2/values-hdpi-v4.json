@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.homosep.app-mergeDebugResources-41:/values-hdpi-v4/values-hdpi-v4.xml",
+            "outputFile": "com.example.homosep.app-mergeDebugResources-42:/values-hdpi-v4/values-hdpi-v4.xml",
             "map": [
                 {
                     "source": "C:\\Users\\arunp\\.gradle\\caches\\transforms-3\\1e2e6004c2e64c83abab7733f4ba23f5\\transformed\\appcompat-1.6.0\\res\\values-hdpi-v4\\values-hdpi-v4.xml",

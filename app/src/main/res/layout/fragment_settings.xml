@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Settings"
+            android:textAppearance="?attr/textAppearanceHeadlineMedium"
+            android:textColor="?attr/colorPrimary"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVehicleConfig"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="start|center_vertical"
+            android:padding="16dp"
+            android:text="Vehicle Configuration"
+            android:textSize="16sp"
+            app:icon="@android:drawable/ic_menu_edit"
+            app:iconSize="24dp"
+            style="@style/Widget.Material3.Button.TextButton.Icon"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnAbout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start|center_vertical"
+            android:padding="16dp"
+            android:text="About"
+            android:textSize="16sp"
+            app:icon="@android:drawable/ic_menu_info_details"
+            app:iconSize="24dp"
+            style="@style/Widget.Material3.Button.TextButton.Icon"/>
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

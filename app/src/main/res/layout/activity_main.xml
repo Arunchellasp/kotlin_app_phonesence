@@ -56,9 +56,9 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="8dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@android:drawable/ic_menu_myplaces"
+                android:src="@android:drawable/ic_menu_preferences"
                 app:tint="?attr/colorOnPrimary"
-                android:contentDescription="Account Profile"/>
+                android:contentDescription="Settings"/>
 
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
@@ -87,17 +87,6 @@
             android:visibility="gone">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabAbout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:contentDescription="About"
-                app:fabSize="mini"
-                app:srcCompat="@android:drawable/ic_menu_info_details"
-                app:tint="?attr/colorOnPrimary"
-                app:backgroundTint="?attr/colorPrimary"/>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fabRtsp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,17 +94,6 @@
                 android:contentDescription="RTSP Streams"
                 app:fabSize="mini"
                 app:srcCompat="@android:drawable/ic_media_play"
-                app:tint="?attr/colorOnPrimary"
-                app:backgroundTint="?attr/colorPrimary"/>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fabDevices"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                android:contentDescription="Devices"
-                app:fabSize="mini"
-                app:srcCompat="@android:drawable/ic_menu_today"
                 app:tint="?attr/colorOnPrimary"
                 app:backgroundTint="?attr/colorPrimary"/>
 

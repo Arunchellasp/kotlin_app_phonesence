@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.homosep.app-mergeDebugResources-41:/values-de/values-de.xml",
+            "outputFile": "com.example.homosep.app-mergeDebugResources-42:/values-de/values-de.xml",
             "map": [
                 {
                     "source": "C:\\Users\\arunp\\.gradle\\caches\\transforms-3\\c0f46399e3fa863d646ea2dba611537d\\transformed\\jetified-play-services-base-18.1.0\\res\\values-de\\values.xml",

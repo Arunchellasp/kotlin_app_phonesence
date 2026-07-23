@@ -40,35 +40,6 @@
                     android:layout_marginBottom="12dp"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/brokerInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/mqtt_broker_hint"
-                        android:inputType="textUri"
-                        android:singleLine="true"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/portInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/mqtt_port_hint"
-                        android:inputType="number"
-                        android:singleLine="true"
-                        android:text="1883"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/deviceNameInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -83,72 +54,38 @@
                     android:layout_marginBottom="12dp"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/usernameInput"
+                        android:id="@+id/vehicleIdInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/mqtt_username_hint"
+                        android:hint="@string/mqtt_vehicle_id_hint"
                         android:inputType="text"
                         android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/passwordInput"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="@string/mqtt_password_hint"
-                        android:inputType="textPassword"
-                        android:singleLine="true"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
                     android:orientation="horizontal">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/connectButton"
+                        android:id="@+id/saveConfigButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
-                        android:text="@string/mqtt_connect"/>
+                        android:text="Save"/>
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/disconnectButton"
+                        android:id="@+id/editConfigButton"
                         style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/mqtt_disconnect"/>
+                        android:text="Change"/>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/startPublishButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1"
-                        android:text="@string/mqtt_start_publish"/>
-
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/stopPublishButton"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/mqtt_stop_publish"/>
-                </LinearLayout>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -201,9 +138,18 @@
                     android:id="@+id/payloadText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="@string/mqtt_payload_label"
                     android:textAppearance="?attr/textAppearanceBodySmall"
                     android:textColor="?attr/colorSecondary"/>
+
+                <TextView
+                    android:id="@+id/eventsText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Received Events: None"
+                    android:textAppearance="?attr/textAppearanceBodyMedium"
+                    android:textColor="?attr/colorPrimary"/>
 
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

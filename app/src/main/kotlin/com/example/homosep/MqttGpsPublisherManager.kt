@@ -13,6 +13,12 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
+import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttClient
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions
 import org.eclipse.paho.client.mqttv3.MqttMessage
@@ -22,7 +28,7 @@ import java.net.URI
 import java.util.Locale
 import java.util.concurrent.Executors
 
-object MqttGpsPublisherManager {
+object MqttGpsPublisherManager : SensorEventListener {
 
     data class State(
         val brokerUri: String = "",
@@ -31,7 +37,8 @@ object MqttGpsPublisherManager {
         val locationSummary: String = "Waiting for GPS data...",
         val payload: String = "Payload:",
         val isConnected: Boolean = false,
-        val isPublishing: Boolean = false
+        val isPublishing: Boolean = false,
+        val receivedEvent: String = "Received Events: None"
     )
 
     interface Listener {
@@ -48,12 +55,23 @@ object MqttGpsPublisherManager {
     private var latestLocation: Location? = null
     private var locationUpdatesStarted = false
 
+    private var sensorManager: SensorManager? = null
+    private var accelData = FloatArray(3)
+    private var gyroData = FloatArray(3)
+    private var magData = FloatArray(3)
+
     private var brokerUri: String = ""
-    private var topic: String = "devices/<device-name>/gps"
+    private var topic: String = "vehicles/<vehicle-id>/location"
+    private var currentVehicleId: String = ""
+    private var currentVehicleName: String = ""
     private var status: String = "Not connected"
     private var locationSummary: String = "Waiting for GPS data..."
     private var payload: String = "Payload:"
+    private var receivedEvent: String = "Received Events: None"
     private var isPublishing: Boolean = false
+    
+    private var currentCleaningId: String = "not assigned"
+    private var currentBoundaryId: String = "not assigned"
 
     fun initialize(context: Context) {
         if (appContext != null) return
@@ -73,6 +91,19 @@ object MqttGpsPublisherManager {
                 }
             }
         }
+
+        sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as? SensorManager
+        sensorManager?.let { sm ->
+            sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also {
+                sm.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
+            }
+            sm.getDefaultSensor(Sensor.TYPE_GYROSCOPE)?.also {
+                sm.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
+            }
+            sm.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD)?.also {
+                sm.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
+            }
+        }
     }
 
     fun addListener(listener: Listener) {
@@ -84,11 +115,13 @@ object MqttGpsPublisherManager {
         listeners.remove(listener)
     }
 
-    fun updateTopic(deviceName: String) {
-        topic = if (deviceName.trim().isEmpty()) {
-            "devices/<device-name>/gps"
+    fun updateConfig(vehicleNumber: String, vehicleId: String) {
+        currentVehicleName = vehicleNumber.trim()
+        currentVehicleId = vehicleId.trim()
+        topic = if (currentVehicleId.isEmpty()) {
+            "vehicles/<vehicle-id>/location"
         } else {
-            "devices/${deviceName.trim()}/gps"
+            "vehicles/${currentVehicleId}/location"
         }
         notifyListeners()
     }
@@ -124,14 +157,12 @@ object MqttGpsPublisherManager {
         locationUpdatesStarted = true
     }
 
-    fun connect(brokerInput: String, portInput: String, usernameInput: String = "", passwordInput: String = "") {
-        val uri = try {
-            buildBrokerUri(brokerInput, portInput)
-        } catch (exception: IllegalArgumentException) {
-            status = exception.message ?: "Invalid MQTT broker"
-            notifyListeners()
-            return
-        }
+    private const val DEFAULT_BROKER_URI = "tcp://4.213.37.248:1883"
+    private const val DEFAULT_USERNAME = "solinas"
+    private const val DEFAULT_PASSWORD = "Solinas@123!@#"
+
+    fun connect() {
+        val uri = DEFAULT_BROKER_URI
 
         brokerUri = uri
         status = "Connecting to $uri"
@@ -151,15 +182,45 @@ object MqttGpsPublisherManager {
                     isAutomaticReconnect = true
                     connectionTimeout = 10
                     keepAliveInterval = 30
-                    if (usernameInput.isNotEmpty()) {
-                        userName = usernameInput
-                    }
-                    if (passwordInput.isNotEmpty()) {
-                        password = passwordInput.toCharArray()
-                    }
+                    userName = DEFAULT_USERNAME
+                    password = DEFAULT_PASSWORD.toCharArray()
                 }
 
+                client.setCallback(object : MqttCallback {
+                    override fun connectionLost(cause: Throwable?) {
+                        status = "Connection lost: ${cause?.message}"
+                        notifyListeners()
+                    }
+
+                    override fun messageArrived(t: String?, message: MqttMessage?) {
+                        val messageStr = message?.toString() ?: ""
+                        if (t != null && t.endsWith("/assignment")) {
+                            try {
+                                val json = JSONObject(messageStr)
+                                if (json.has("cleaningId")) {
+                                    currentCleaningId = json.getString("cleaningId")
+                                }
+                                if (json.has("boundaryId")) {
+                                    currentBoundaryId = json.getString("boundaryId")
+                                }
+                            } catch (e: Exception) {
+                                // Ignore non-JSON parsing errors
+                            }
+                        } else {
+                            receivedEvent = "Received Events:\n${messageStr.ifEmpty { "Empty" }}"
+                        }
+                        notifyListeners()
+                    }
+
+                    override fun deliveryComplete(token: IMqttDeliveryToken?) {}
+                })
                 client.connect(options)
+                
+                if (currentVehicleId.isNotEmpty()) {
+                    client.subscribe("vehicles/$currentVehicleId/events")
+                    client.subscribe("vehicles/$currentVehicleId/assignment")
+                }
+                
                 mqttClient = client
                 status = "Connected to $uri"
                 notifyListeners()
@@ -190,24 +251,9 @@ object MqttGpsPublisherManager {
         }
     }
 
-    fun startPublishing(deviceName: String) {
-        updateTopic(deviceName)
-
-        if (topic == "devices/<device-name>/gps") {
-            status = "Enter a device name"
-            notifyListeners()
-            return
-        }
-
-        if (mqttClient?.isConnected != true) {
-            status = "Connect to an MQTT broker before publishing"
-            notifyListeners()
-            return
-        }
-
-        val location = latestLocation
-        if (location == null) {
-            status = "Waiting for GPS data..."
+    fun startPublishing() {
+        if (currentVehicleId.isEmpty()) {
+            status = "Enter a vehicle ID"
             notifyListeners()
             return
         }
@@ -215,7 +261,11 @@ object MqttGpsPublisherManager {
         isPublishing = true
         status = "Started publishing GPS"
         notifyListeners()
-        publishLocation(location)
+
+        val location = latestLocation
+        if (location != null && mqttClient?.isConnected == true) {
+            publishLocation(location)
+        }
     }
 
     fun stopPublishing() {
@@ -236,8 +286,7 @@ object MqttGpsPublisherManager {
             try {
                 val client = mqttClient
                 if (client?.isConnected != true) {
-                    isPublishing = false
-                    status = "Connect to an MQTT broker before publishing"
+                    status = "Waiting for MQTT connection to publish"
                     notifyListeners()
                     return@execute
                 }
@@ -250,7 +299,6 @@ object MqttGpsPublisherManager {
                 status = "Published to $publishTopic"
                 notifyListeners()
             } catch (exception: Exception) {
-                isPublishing = false
                 status = "MQTT publish failed: ${exception.message}"
                 notifyListeners()
             }
@@ -265,7 +313,8 @@ object MqttGpsPublisherManager {
             locationSummary = locationSummary,
             payload = payload,
             isConnected = mqttClient?.isConnected == true,
-            isPublishing = isPublishing
+            isPublishing = isPublishing,
+            receivedEvent = receivedEvent
         )
     }
 
@@ -295,14 +344,34 @@ object MqttGpsPublisherManager {
     }
 
     private fun buildGpsPayload(location: Location): String {
-        return JSONObject()
-            .put("lat", location.latitude)
-            .put("lng", location.longitude)
-            .put("speed", if (location.hasSpeed()) location.speed else 0.0f)
-            .put("accuracy", if (location.hasAccuracy()) location.accuracy else 0.0f)
-            .put("heading", if (location.hasBearing()) location.bearing else 0.0f)
-            .put("altitude", if (location.hasAltitude()) location.altitude else 0.0)
-            .toString()
+        return JSONObject().apply {
+            put("vehicleId", currentVehicleId)
+            put("vehiclename", currentVehicleName)
+            put("center", JSONObject().apply {
+                put("longitude", location.longitude)
+                put("latitude", location.latitude)
+            })
+            put("bearing", if (location.hasBearing()) location.bearing else 0.0f)
+            put("speed", if (location.hasSpeed()) location.speed else 0.0f)
+            put("wasteLevel", 75)
+            put("assignedBoundaryId", currentBoundaryId)
+            put("cleaningId", currentCleaningId)
+            put("accelerometer", JSONObject().apply {
+                put("x", accelData[0])
+                put("y", accelData[1])
+                put("z", accelData[2])
+            })
+            put("gyroscope", JSONObject().apply {
+                put("x", gyroData[0])
+                put("y", gyroData[1])
+                put("z", gyroData[2])
+            })
+            put("magnetometer", JSONObject().apply {
+                put("x", magData[0])
+                put("y", magData[1])
+                put("z", magData[2])
+            })
+        }.toString()
     }
 
     private fun buildLocationSummary(location: Location): String {
@@ -316,5 +385,29 @@ object MqttGpsPublisherManager {
             if (location.hasBearing()) location.bearing else 0.0f,
             if (location.hasAltitude()) location.altitude else 0.0
         )
+    }
+    override fun onSensorChanged(event: SensorEvent?) {
+        if (event == null) return
+        when (event.sensor.type) {
+            Sensor.TYPE_ACCELEROMETER -> {
+                accelData[0] = event.values[0]
+                accelData[1] = event.values[1]
+                accelData[2] = event.values[2]
+            }
+            Sensor.TYPE_GYROSCOPE -> {
+                gyroData[0] = event.values[0]
+                gyroData[1] = event.values[1]
+                gyroData[2] = event.values[2]
+            }
+            Sensor.TYPE_MAGNETIC_FIELD -> {
+                magData[0] = event.values[0]
+                magData[1] = event.values[1]
+                magData[2] = event.values[2]
+            }
+        }
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // Not used
     }
 }

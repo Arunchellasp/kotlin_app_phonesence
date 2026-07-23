@@ -71,6 +71,6 @@ class TrackingFragment : Fragment() {
     }
 
     companion object {
-        private const val SETTINGS_SITE_URL = "https://msvl65xz-3000.inc1.devtunnels.ms/"
+        private const val SETTINGS_SITE_URL = "https://dev-swasth.solinas.in/"
     }
 }

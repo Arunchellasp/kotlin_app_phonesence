@@ -3242,7 +3242,8 @@ id beginning
 id blocking
 id bottom
 id bounce
-id brokerInput
+id btnAbout
+id btnVehicleConfig
 id buttonPanel
 id cancel_action
 id cancel_button
@@ -3265,7 +3266,6 @@ id clockwise
 id collapseActionView
 id compress
 id confirm_button
-id connectButton
 id container
 id content
 id contentPanel
@@ -3296,7 +3296,6 @@ id direct
 id disableHome
 id disablePostScroll
 id disableScroll
-id disconnectButton
 id disjoint
 id dragDown
 id dragEnd
@@ -3309,6 +3308,7 @@ id easeIn
 id easeInOut
 id easeOut
 id edge
+id editConfigButton
 id edit_query
 id elastic
 id embed
@@ -3317,6 +3317,7 @@ id endToStart
 id end_padder
 id enterAlways
 id enterAlwaysCollapsed
+id eventsText
 id exitUntilCollapsed
 id exo_ad_overlay
 id exo_artwork
@@ -3369,9 +3370,7 @@ id exo_track_selection_view
 id exo_vr
 id expand_activities_button
 id expanded_menu
-id fabAbout
 id fabDashboard
-id fabDevices
 id fabHome
 id fabMenuContainer
 id fabRtsp
@@ -3540,7 +3539,6 @@ id parent
 id parentPanel
 id parentRelative
 id parent_matrix
-id passwordInput
 id password_toggle
 id path
 id pathRelative
@@ -3550,7 +3548,6 @@ id percent
 id pin
 id playerView
 id pooling_container_listener_holder_tag
-id portInput
 id position
 id postLayout
 id pressed
@@ -3569,6 +3566,7 @@ id right_side
 id rounded
 id row_index_key
 id rtspUrlInput
+id saveConfigButton
 id save_non_transition_alpha
 id save_overlay_view
 id sawtooth
@@ -3640,7 +3638,6 @@ id src_over
 id standard
 id start
 id startHorizontal
-id startPublishButton
 id startToEnd
 id startVertical
 id staticLayout
@@ -3648,7 +3645,6 @@ id staticPostLayout
 id statusText
 id status_bar_latest_event_content
 id stop
-id stopPublishButton
 id streamsRecyclerView
 id stretch
 id submenuarrow
@@ -3709,7 +3705,7 @@ id uniform
 id unlabeled
 id up
 id useLogo
-id usernameInput
+id vehicleIdInput
 id video_decoder_gl_surface_view
 id view_offset_helper
 id view_tree_lifecycle_owner
@@ -3873,6 +3869,7 @@ layout fragment_about
 layout fragment_dashboard
 layout fragment_devices
 layout fragment_rtsp_streams
+layout fragment_settings
 layout fragment_tracking
 layout item_rtsp_stream
 layout m3_alert_dialog
@@ -4154,6 +4151,7 @@ string mqtt_stop_publish
 string mqtt_title
 string mqtt_topic_label
 string mqtt_username_hint
+string mqtt_vehicle_id_hint
 string mqtt_waiting_location
 string mtrl_badge_numberless_content_description
 string mtrl_checkbox_button_icon_path_checked

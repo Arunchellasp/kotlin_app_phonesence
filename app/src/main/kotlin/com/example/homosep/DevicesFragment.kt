@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 import com.example.homosep.databinding.FragmentDevicesBinding
 
 class DevicesFragment : Fragment(), MqttGpsPublisherManager.Listener {
@@ -43,37 +45,50 @@ class DevicesFragment : Fragment(), MqttGpsPublisherManager.Listener {
 
         MqttGpsPublisherManager.initialize(requireContext())
 
-        binding.deviceNameInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+        val masterKey = MasterKey.Builder(requireContext())
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                MqttGpsPublisherManager.updateTopic(s?.toString().orEmpty())
-            }
+        val sharedPrefs = EncryptedSharedPreferences.create(
+            requireContext(),
+            "vehicle_config_secure",
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
 
-            override fun afterTextChanged(s: Editable?) = Unit
-        })
+        val savedName = sharedPrefs.getString("vehicle_name", "") ?: ""
+        val savedId = sharedPrefs.getString("vehicle_id", "") ?: ""
 
-        binding.connectButton.setOnClickListener {
-            MqttGpsPublisherManager.connect(
-                binding.brokerInput.text.toString(),
-                binding.portInput.text.toString(),
-                binding.usernameInput.text.toString(),
-                binding.passwordInput.text.toString()
-            )
+        if (savedName.isNotEmpty() || savedId.isNotEmpty()) {
+            binding.deviceNameInput.setText(savedName)
+            binding.vehicleIdInput.setText(savedId)
+            MqttGpsPublisherManager.updateConfig(savedName, savedId)
+            binding.deviceNameInput.isEnabled = false
+            binding.vehicleIdInput.isEnabled = false
         }
 
-        binding.disconnectButton.setOnClickListener {
-            MqttGpsPublisherManager.disconnect()
+        binding.saveConfigButton.setOnClickListener {
+            val name = binding.deviceNameInput.text.toString()
+            val id = binding.vehicleIdInput.text.toString()
+            sharedPrefs.edit()
+                .putString("vehicle_name", name)
+                .putString("vehicle_id", id)
+                .apply()
+
+            binding.deviceNameInput.isEnabled = false
+            binding.vehicleIdInput.isEnabled = false
+            MqttGpsPublisherManager.updateConfig(name, id)
+            MqttGpsPublisherManager.connect()
+            MqttGpsPublisherManager.startPublishing()
         }
 
-        binding.startPublishButton.setOnClickListener {
-            requestLocationIfNeeded()
-            MqttGpsPublisherManager.startPublishing(binding.deviceNameInput.text.toString())
+        binding.editConfigButton.setOnClickListener {
+            binding.deviceNameInput.isEnabled = true
+            binding.vehicleIdInput.isEnabled = true
         }
 
-        binding.stopPublishButton.setOnClickListener {
-            MqttGpsPublisherManager.stopPublishing()
-        }
+
 
         requestLocationIfNeeded()
     }
@@ -100,6 +115,7 @@ class DevicesFragment : Fragment(), MqttGpsPublisherManager.Listener {
                 binding.statusText.text = "${getString(R.string.mqtt_status_label)} ${state.status}"
                 binding.locationText.text = state.locationSummary
                 binding.payloadText.text = state.payload
+                binding.eventsText.text = state.receivedEvent
             }
         }
     }

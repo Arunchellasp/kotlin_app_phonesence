@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.homosep.app-mergeDebugResources-41:/values-mn/values-mn.xml",
+            "outputFile": "com.example.homosep.app-mergeDebugResources-42:/values-mn/values-mn.xml",
             "map": [
                 {
                     "source": "C:\\Users\\arunp\\.gradle\\caches\\transforms-3\\7e1a2fc594e7bfa544ec150457ded004\\transformed\\core-1.10.1\\res\\values-mn\\values-mn.xml",

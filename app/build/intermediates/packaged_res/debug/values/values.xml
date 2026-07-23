@@ -49,7 +49,7 @@
     <string name="magnetometer_title">Magnetometer (μT)</string>
     <string name="mqtt_broker_hint">Broker IP or link</string>
     <string name="mqtt_connect">Connect</string>
-    <string name="mqtt_device_name_hint">Device name</string>
+    <string name="mqtt_device_name_hint">Vehicle number</string>
     <string name="mqtt_disconnect">Disconnect</string>
     <string name="mqtt_location_label">Latest GPS:</string>
     <string name="mqtt_not_connected">Not connected</string>
@@ -59,9 +59,10 @@
     <string name="mqtt_start_publish">Start Publish GPS</string>
     <string name="mqtt_status_label">Status:</string>
     <string name="mqtt_stop_publish">Stop Publish</string>
-    <string name="mqtt_title">MQTT GPS Publisher</string>
+    <string name="mqtt_title">Vehicle Setting</string>
     <string name="mqtt_topic_label">Topic:</string>
     <string name="mqtt_username_hint">Username (optional)</string>
+    <string name="mqtt_vehicle_id_hint">Vehicle ID</string>
     <string name="mqtt_waiting_location">Waiting for GPS data...</string>
     <string name="nav_about">About</string>
     <string name="nav_dashboard">Dashboard</string>
